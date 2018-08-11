@@ -1,11 +1,11 @@
-require "net/http"
-require "json"
+require 'net/http'
+require 'json'
 
-todoist_token = ''
+todoist_token = 'api_key'
 
 SCHEDULER.every '5m', :first_in => 0 do |job|
     
-    item_url_string  = 'https://todoist.com/API/v7/sync?token=' + todoist_token + '&resource_types=["items"]&sync_token=\'*\''
+    item_url_string  = 'https://beta.todoist.com/API/v8/tasks?token=' + todoist_token +
     encoded_item_url_string = URI.encode(item_url_string)
 
     item_uri = URI.parse(encoded_item_url_string)
@@ -16,7 +16,7 @@ SCHEDULER.every '5m', :first_in => 0 do |job|
 
     if response.code == "200"
         result = JSON.parse(response.body)
-        items = result['items']
+        items = result
         items_array = Array[]
         items.each do |st|
              items_array.push(st['content'])
